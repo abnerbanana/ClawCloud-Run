@@ -1,15 +1,21 @@
-name: ClawCloud Keep Alive
+name: ClawCloud Auto Login (GitHub Token)
 
 on:
-  # 每7天自动运行一次（UTC时间）
   schedule:
-    - cron: '0 8 */7 * *'
-  # 手动触发
+    # 每5天运行一次 (UTC 时间早上6点)
+    - cron: '0 6 */5 * *'
   workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
-  keep-alive:
+  auto-login:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
       - name: Checkout repository
@@ -22,10 +28,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install playwright requests
+          pip install playwright
           playwright install chromium
+          playwright install-deps
 
-      - name: Run keep-alive script
+      - name: Run auto login
         env:
-          CLAW_CLOUD_COOKIE: ${{ secrets.CLAW_CLOUD_COOKIE }}
-        run: python scripts/keep_alive.py
+          GH_USERNAME: ${{ secrets.GH_USERNAME }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          DEBUG_MODE: ${{ inputs.debug }}
+        run: python scripts/auto_login.py
+
+      - name: Upload debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ github.run_number }}
+          path: |
+            *.png
+            *.json
+          retention-days: 7
+          if-no-files-found: ignore
