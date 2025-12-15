@@ -19,7 +19,7 @@
 | `TG_BOT_TOKEN` | Telegram Bot Token |
 | `TG_CHAT_ID` | Telegram Chat ID |
 | `REPO_TOKEN` | GitHub Token（用于自动更新 Secret） |
-| `GITHUB_REPOSITORY` | GitHub 仓库，格式 用户名/仓库名	（用于自动更新 Secret） |
+| `GITHUB_REPOSITORY` | GitHub 仓库，格式 用户名/仓库名	（用于自动更新 Secret）自动从 GitHub 环境中获取，不用设置 |
 
 ## 流程图
 ```
