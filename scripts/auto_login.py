@@ -409,7 +409,7 @@ class AutoLogin:
                 if not self.wait_redirect(page):
                     self.shot(page, "重定向失败")
                     self.notify(False, "重定向失败")
-                    sys.exit(1)
+                    #sys.exit(1)
                 
                 self.shot(page, "重定向成功")
                 
